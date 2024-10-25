@@ -1,0 +1,24 @@
+@model IEnumerable<WebApplication_1.Models.Employee>
+
+@foreach (var employee in Model)
+{
+    <tr>
+        <td>
+            @if (!string.IsNullOrEmpty(employee.PhotoPath))
+            {
+                <img src="@employee.PhotoPath" alt="Фото" width="50" height="50" />
+            }
+            else
+            {
+                <img src="~/images/default.png" alt="Фото" width="50" height="50" />
+            }
+        </td>
+        <td>@employee.FullName</td>
+        <td>@employee.Department.Name</td>
+        <td>@employee.PhoneNumber</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@employee.Id">Редактировать</a> |
+            <a asp-action="Delete" asp-route-id="@employee.Id">Удалить</a>
+        </td>
+    </tr>
+}

@@ -1,0 +1,66 @@
+@model IEnumerable<WebApplication_1.Models.Employee>
+
+@{
+    ViewData["Title"] = "Список сотрудников";
+}
+
+<h1>Список сотрудников</h1>
+
+<form method="get" asp-action="Index">
+    <input type="text" name="searchString" placeholder="Поиск..." value="@ViewData["searchString"]" />
+    <input type="submit" value="Поиск" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Фотография</th>
+            <th>ФИ</th>
+            <th>Отдел</th>
+            <th>Номер телефона</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var employee in Model)
+    {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(employee.PhotoPath))
+                {
+                    <img src="@employee.PhotoPath" alt="Фото" width="50" height="50" />
+                }
+                else
+                {
+                    <img src="~/images/default.png" alt="Фото" width="50" height="50" />
+                }
+            </td>
+            <td>@employee.FullName</td>
+            <td>@employee.Department.Name</td>
+            <td>@employee.PhoneNumber</td>
+            <td>
+                <!--<a asp-action="Edit" asp-route-id="@employee.Id">Редактировать</a> |-->
+                <a asp-action="Delete" asp-route-id="@employee.Id">Удалить</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div>
+    Страница @ViewBag.CurrentPage из @ViewBag.TotalPages
+    @{
+        int currentPage = ViewBag.CurrentPage;
+        int totalPages = ViewBag.TotalPages;
+    }
+    @if (currentPage > 1)
+    { 
+        <a asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-searchString="@ViewData["searchString"]">Предыдущая</a>
+    }
+    @if (currentPage < totalPages && totalPages > 1)
+    {
+        <a asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-searchString="@ViewData["searchString"]">Следующая</a>
+    }
+</div>
+
+<!--<a asp-action="Create" class="btn btn-primary">Добавить сотрудника</a>-->
